@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aluraflix</title>
+    <!-- Links to Google Fonts for Bai Jamjuree -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #0d120e;
+            color: rgb(247, 7, 7);
+            font-family: "Bai Jamjuree", sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+        I
+        header {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        section {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            align-items: center;
+            width: 100%;
+        }
+        
+        h1 {
+            font-size: 2rem;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+
+        p {
+            font-size: 1.25rem;
+        }
+        
+        .video-player-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            align-items: center;
+            width: 100%;
+        }
+
+        .input-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 90%;
+            max-width: 600px;
+        }
+
+        .input-container input {
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: 2px solid #fff;
+            background-color: #2d3424;
+            color: rgb(253, 163, 208);
+            font-family: "Bai Jamjuree", sans-serif;
+            font-size: 1rem;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .input-container button {
+            background-color: #f70707;
+            color: #fff;
+            font-family: "Bai Jamjuree", sans-serif;
+            font-size: 1rem;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .input-container button:hover {
+            background-color: #e00606;
+        }
+
+        iframe {
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 560px;
+            height: 315px;
+        }
+
+        @media (min-width: 768px) {
+            .video-player-container {
+                flex-direction: row;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>CARTOONTV</header>
+    <section>
+        <div>
+            <h1>O QUE VAMOS VER HOJE?</h1>
+            <p>#HELLO KITTY</p>
+        </div>
+        
+        <!-- Input field and button for new YouTube links -->
+        <div class="input-container">
+            <input type="text" id="videoUrlInput" placeholder="Cole o link do YouTube aqui...">
+            <button id="addVideoButton">Adicionar Vídeo</button>
+        </div>
+
+        <div class="video-player-container">
+            <!-- Initial video -->
+            <iframe id="videoPlayer1" src="https://www.youtube.com/embed/_4XQbwZsLN0"
+                title="YouTube video player" frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen></iframe>
+            <!-- The second video player that will be updated -->
+            <iframe id="videoPlayer2" src="https://www.youtube.com/embed/ah_3uKxdOjM"
+                title="YouTube video player" frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen></iframe>
+        </div>
+    </section>
+
+    <script>
+        // Get the HTML elements
+        const input = document.getElementById('videoUrlInput');
+        const button = document.getElementById('addVideoButton');
+        const videoPlayer = document.getElementById('videoPlayer2');
+
+        // Function to extract the video ID from a YouTube URL
+        function getYouTubeVideoId(url) {
+            const urlParams = new URLSearchParams(new URL(url).search);
+            if (urlParams.has('v')) {
+                return urlParams.get('v');
+            }
+            const shortUrlMatch = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|shorts\/))([\w-]{11})/);
+            if (shortUrlMatch && shortUrlMatch[1]) {
+                return shortUrlMatch[1];
+            }
+            return null;
+        }
+
+        // Add an event listener to the button
+        button.addEventListener('click', () => {
+            const videoUrl = input.value;
+            if (videoUrl) {
+                const videoId = getYouTubeVideoId(videoUrl);
+                if (videoId) {
+                    const newEmbedUrl = `https://www.youtube.com/embed/${videoId}`;
+                    videoPlayer.src = newEmbedUrl;
+                    input.value = ''; // Clear the input field
+                } else {
+                    alert("Por favor, insira um link de vídeo válido do YouTube.");
+                }
+            }
+        });
+    </script>
+</body>
+</html>
